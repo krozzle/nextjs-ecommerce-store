@@ -1,62 +1,70 @@
+import Link from 'next/link';
 import Head from 'next/head';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
-export default function About() {
+require('dotenv').config();
+
+const { getProducts, getProductById } = require('../../db');
+
+app.get('/', async (req, res) => {
+  const products = await getProducts();
+
+  res.send(`
+  <h1>Products</h1>
+  <ul>
+${users.map(product => {
+  return `<li>
+  <a href="/products/${product.id}">${product.name}</a>
+  </li>`;
+})}
+  </ul>
+  `);
+});
+
+app.get('/products/:productId', async function productsHandler(req, res) {
+  const productId = req.params.productId;
+
+  const product = await getUserById(productId);
+
+  if (product.count === 0) {
+    res.status(404).send('we are out of stuff! soz');
+  }
+  res.send(`
+  <h1>${product[0].name}</h1>
+  <pre>${JSON.stringify(product[0])}</pre>
+  `);
+});
+
+app.listen(port, () =>
+  console.log(`example app listening at http://localhost:${port}`),
+);
+
+export default function products(props) {
   return (
     <div className='container'>
       <Head>
-        <title>about TSH</title>
+        <title>store TSH</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
+
       <main>
         <p className='description'>
-          <code>what's the deal with </code>
+          <code>welcome to</code>
         </p>
-        <h1 className='title'>The Smelly Husband?</h1>
+        <h1 className='title'>The Smelly Husband's</h1>
         <p className='description'>
-          <code>100% real talk</code>
+          <code>online store</code>
         </p>
 
         <div className='grid'>
-          <div className='card'>
-            <h2>A wise man once said:</h2>
-            <h1>'happy wife, happy life'</h1>
-            <br />
-            <p>
-              Our team at TSH believes it to be true because it's the life we
-              live a.k.a. the best life.
-            </p>
-            <br />
-            <p className='strikethrough'>Ask our wives.</p>
-            <p>Our word should be sufficient!</p>
-          </div>
-          <div className='card'>
-            <p>
-              Becoming a better husband is easy. All it seems to take is
-              improving by 1% every day. If you can't think of any areas to
-              improve in, ask your wife for advice.
-            </p>
-            <p>
-              You should always be able to kick your yesterd*y's self's ass.
-            </p>
-            <p>
-              <code class='codeStyle'>
-                If you find yourself not having a wife, you should visit our
-                store ASAP!!
-              </code>
-            </p>
-          </div>
-          <a href='/store' className='card'>
-            <div>
-              <p>
-                We wanna help! ..and sell our stuff, obviously. They're all made
-                by 100% sustainable means.
-                <p>Visit our store and see how we can be of service.</p>
-              </p>
-            </div>
-          </a>
+          <Link href='/products/1'>
+            <a className='card'>
+              <img className='image' src='/razor1.jpg' alt='Razor' />
+              <p>Razor (Vegan)</p>
+            </a>
+          </Link>
         </div>
       </main>
 
@@ -80,9 +88,7 @@ export default function About() {
           justify-content: center;
           align-items: center;
         }
-        .strikethrough {
-          text-decoration: line-through;
-        }
+
         footer {
           width: 100%;
           height: 100px;
@@ -146,18 +152,16 @@ export default function About() {
         .grid {
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: space-around;
           flex-wrap: wrap;
 
-          max-width: 100%;
-          min-width: 60%;
+          max-width: 800px;
           margin-top: 3rem;
         }
 
         .card {
           margin: 1rem;
-          background: ##e5e3db;
-          flex-basis: 70%;
+          height: 15em;
           padding: 1.5rem;
           text-align: center;
           color: inherit;
@@ -165,6 +169,11 @@ export default function About() {
           border: 1px solid #eaeaea;
           border-radius: 10px;
           transition: color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .image {
+          width: 30%;
+          height: 100%;
         }
 
         .card:hover,

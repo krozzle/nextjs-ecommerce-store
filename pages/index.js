@@ -28,6 +28,7 @@ export default function Home() {
               Find products to improve your husband, your home and your life.
             </p>
           </a>
+          <img className='image' src='/coffee-in-bed.jpg' alt='Coffee in bed' />
         </div>
       </main>
 
@@ -64,6 +65,11 @@ export default function Home() {
 
         footer img {
           margin-left: 0.5rem;
+        }
+
+        .image {
+          width: 30%;
+          height: 100%;
         }
 
         footer a {
@@ -117,7 +123,6 @@ export default function Home() {
           display: flex;
           align-items: center;
           justify-content: center;
-          flex-wrap: wrap;
 
           max-width: 100%;
           min-width: 60%;

@@ -5,8 +5,8 @@ export default function Header() {
   const linkList = [
     { name: 'Home', url: '/' },
     { name: 'About', url: '/about' },
-    { name: 'Store', url: '/store' },
-    { name: 'Users', url: '/users' },
+    { name: 'Store', url: '/pages/products/index.js' },
+    { name: 'Profile', url: '/users' },
   ];
 
   return (
@@ -42,8 +42,6 @@ export default function Header() {
             display: flex;
             justify-content: space-around;
             align-items: stretch;
-            width: 20%;
-            transform: skewX(-20deg);
           }
 
           .logo {
@@ -62,9 +60,10 @@ export default function Header() {
           }
 
           .aLinks {
-            border: groove 1px;
             padding: 1em;
-            transform: skew(20deg);
+            border: solid 1px black;
+
+            text-align: center;
           }
 
           .headLink {
@@ -78,7 +77,9 @@ export default function Header() {
             list-style-type: none;
           }
           .spanStyle {
-            transform: skew(20deg);
+             {
+              /* transform: skew(20deg); */
+            }
           }
         `}
       </style>

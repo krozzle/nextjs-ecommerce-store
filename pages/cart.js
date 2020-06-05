@@ -1,33 +1,47 @@
 import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import cookie from 'js-cookie';
+import nextCookies from 'next-cookies';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import products from './products/products';
 
-export default function Home() {
+export default function Cart(props) {
+  const [total, setTotal] = useState(0);
+  const [cart, setCart] = useState([]);
+
+  function handleUnits(e) {
+    e.target.value * props.cart.price;
+  }
+
+  function removeItem(id) {
+    cookie.remove(
+      props.cart.id.find((item) => {
+        return item.id !== item.id;
+      }),
+    );
+    window.location.reload();
+
   return (
     <div className='container'>
       <Head>
-        <title>store TSH</title>
+        <title>The Smelly Husband</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
 
       <main>
-        <p className='description'>
-          <code>welcome to</code>
-        </p>
-        <h1 className='title'>The Smelly Husband's</h1>
-        <p className='description'>
-          <code>online store</code>
-        </p>
+        <h1 className='title'>Shopping cart</h1>
 
         <div className='grid'>
           <a href='/store' className='card'>
-            <img className='image' src='/razor1.jpg' alt='Razor' />
+            <h3>Visit Our Store &rarr;</h3>
             <p>
-              Substitute your carbs with proteins and show off that handsome
-              face of yours! Our razors are 100% vegan. Ladies will love you.
+              Find products to improve your husband, your home and your life.
             </p>
           </a>
+          <img className='image' src='/coffee-in-bed.jpg' alt='Coffee in bed' />
         </div>
       </main>
 
@@ -44,6 +58,7 @@ export default function Home() {
         }
 
         main {
+          margin-top: 1em;
           padding: 5rem 0;
           flex: 1;
           display: flex;
@@ -63,6 +78,11 @@ export default function Home() {
 
         footer img {
           margin-left: 0.5rem;
+        }
+
+        .image {
+          width: 30%;
+          height: 100%;
         }
 
         footer a {
@@ -115,30 +135,24 @@ export default function Home() {
         .grid {
           display: flex;
           align-items: center;
-          justify-content: space-around;
-          flex-wrap: wrap;
+          justify-content: center;
 
-          max-width: 800px;
+          max-width: 100%;
+          min-width: 60%;
           margin-top: 3rem;
         }
 
         .card {
           margin: 1rem;
-          flex-basis: 45%;
+          flex-basis: 70%;
           padding: 1.5rem;
-          text-align: left;
+          text-align: center;
           color: inherit;
           text-decoration: none;
           border: 1px solid #eaeaea;
           border-radius: 10px;
           transition: color 0.15s ease, border-color 0.15s ease;
         }
-
-        .image {
-          width: 30%;
-          height: 100%;
-        }
-
         .card:hover,
         .card:focus,
         .card:active {

@@ -1,67 +1,86 @@
+import { useState } from 'react';
+import cookie from 'js-cookie';
 import Head from 'next/head';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import { getProductById } from '../../db';
 
-export default function About() {
+export default function Product({ product }) {
+  if (!product) return <div>not found!</div>;
+
+  const [units, setUnits] = useState(0);
+  const [total, setTotal] = useState(product.price);
+
+  function handleUnits(e) {
+    setUnits(Number(e.target.value));
+    setTotal(e.target.value * product.price);
+  }
+  function addToCart() {
+    let cartItems = cookie.JSON('cart') || [];
+
+    const product = {
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      price: product.price,
+      description: product.description,
+      amount: units,
+    };
+
+    cartItems.push(product);
+    cookie.set('cart', cartItems);
+
+    let itemFilter = itemsStored.find(item => item.id === product.id);
+
+    if (itemFilter) {
+      cartItems = itemsStored.map((item, id) => {
+        item.id === product.id
+          ? { ...item, amount: product.amount + items }
+          : product;
+      });
+      cookie.set('cart', cartItems);
+    }
+
+    window.location.reload();
+  }
+
   return (
     <div className='container'>
       <Head>
-        <title>about TSH</title>
+        <title>{product.name}</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
+
       <main>
-        <p className='description'>
-          <code>what's the deal with </code>
-        </p>
-        <h1 className='title'>The Smelly Husband?</h1>
-        <p className='description'>
-          <code>100% real talk</code>
-        </p>
+        <h2>The Smelly Husband's</h2>
+
+        <h1 className='title'>{product.name}</h1>
+        <p className='description'>{product.description}</p>
 
         <div className='grid'>
-          <div className='card'>
-            <h2>A wise man once said:</h2>
-            <h1>'happy wife, happy life'</h1>
-            <br />
-            <p>
-              Our team at TSH believes it to be true because it's the life we
-              live a.k.a. the best life.
-            </p>
-            <br />
-            <p className='strikethrough'>Ask our wives.</p>
-            <p>Our word should be sufficient!</p>
+          <div>
+            <img className='image' src={product.image} alt='razor' />
           </div>
-          <div className='card'>
-            <p>
-              Becoming a better husband is easy. All it seems to take is
-              improving by 1% every day. If you can't think of any areas to
-              improve in, ask your wife for advice.
-            </p>
-            <p>
-              You should always be able to kick your yesterd*y's self's ass.
-            </p>
-            <p>
-              <code class='codeStyle'>
-                If you find yourself not having a wife, you should visit our
-                store ASAP!!
-              </code>
-            </p>
+          <div>
+            <p className='price'>{product.price}€</p>
+
+            <label for='productNumber'>
+              <input
+                type='number'
+                min='1'
+                placeholder='0'
+                onChange={handleUnits}
+              ></input>
+            </label>
+            <p>Total: {total}€</p>
           </div>
-          <a href='/store' className='card'>
-            <div>
-              <p>
-                We wanna help! ..and sell our stuff, obviously. They're all made
-                by 100% sustainable means.
-                <p>Visit our store and see how we can be of service.</p>
-              </p>
-            </div>
-          </a>
+        </div>
+        <div>
+          <button onClick={addToCart}>add to cart</button>
         </div>
       </main>
-
       <Footer />
-
       <style jsx>{`
         .container {
           min-height: 100vh;
@@ -76,15 +95,12 @@ export default function About() {
           padding: 5rem 0;
           flex: 1;
           display: flex;
-          flex-direction: column;
+          flex-direction: column; 
           justify-content: center;
           align-items: center;
         }
-        .strikethrough {
-          text-decoration: line-through;
-        }
+
         footer {
-          width: 100%;
           height: 100px;
           border-top: 1px solid #eaeaea;
           display: flex;
@@ -134,7 +150,7 @@ export default function About() {
           font-size: 1.5rem;
         }
 
-        .codeStyle {
+        code {
           background: #fafafa;
           border-radius: 5px;
           padding: 0.75rem;
@@ -146,25 +162,28 @@ export default function About() {
         .grid {
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: space-around;
           flex-wrap: wrap;
 
-          max-width: 100%;
-          min-width: 60%;
+          max-width: 800px;
           margin-top: 3rem;
         }
 
         .card {
           margin: 1rem;
-          background: ##e5e3db;
-          flex-basis: 70%;
+          flex-basis: 45%;
           padding: 1.5rem;
-          text-align: center;
+          text-align: left;
           color: inherit;
           text-decoration: none;
           border: 1px solid #eaeaea;
           border-radius: 10px;
           transition: color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .image {
+          width: 30%;
+          height: 100%;
         }
 
         .card:hover,
@@ -213,4 +232,17 @@ export default function About() {
       `}</style>
     </div>
   );
+}
+
+export function getServerSideProps(context) {
+  const product = getProductById(context.params.id);
+  if (product === undefined) {
+    return { props: {} };
+  }
+  return {
+    // will be passed to the page component as props
+    props: {
+      product,
+    },
+  };
 }
