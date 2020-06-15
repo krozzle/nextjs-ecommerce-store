@@ -5,7 +5,7 @@ export default function Header() {
   const linkList = [
     { name: 'Home', url: '/' },
     { name: 'About', url: '/about' },
-    { name: 'Store', url: '/pages/products/index.js' },
+    { name: 'Store', url: '/products' },
     { name: 'Profile', url: '/users' },
   ];
 
@@ -19,7 +19,7 @@ export default function Header() {
       <div className='navLink'>
         {linkList.map(link => {
           return (
-            <Link className='navLink' key={link.url} href={link.url}>
+            <Link key={link.url} href={link.url}>
               <a className='aLinks'>{link.name}</a>
             </Link>
           );
@@ -86,3 +86,17 @@ export default function Header() {
     </div>
   );
 }
+
+// export async function getServerSideProps(context) {
+//   const { getProductById } = await import('../db');
+//   const product = getProductById(context.params.id);
+//   if (product === undefined) {
+//     return { props: {} };
+//   }
+//   return {
+//     // will be passed to the page component as props
+//     props: {
+//       product,
+//     },
+//   };
+// }

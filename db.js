@@ -3,31 +3,43 @@ require('dotenv').config();
 const postgres = require('postgres');
 const sql = postgres();
 
-module.exports.getProducts = async function getProducts() {
-  const products = await sql`
-  select * from products
-  `;
-};
-
 // const products = [
 //   {
 //     id: '1',
 //     name: 'Razor',
-//     image: '/razor1.jpg',
+//     img: '/razor1.jpg',
 //     price: 11,
 //     description:
 //       'Show off your freshly shaved handsome face! Our razors are made by completely sustainable means and are 100% vegan.',
 //   },
 // ];
 
-module.exports.getProductById = async function getProducts(id) {
+export async function getProducts() {
+  const products = await sql`
+  SELECT * FROM products
+  `;
+  return products;
+}
+
+export async function updateProductNameById(id, name) {
   const product = await sql`
-  select * from products where id = {id}
+    UPDATE products
+      SET name = ${name}
+      WHERE id = ${id}
   `;
   return product;
-  // return products.find(product => product.id === id);
-};
+}
 
-// export function getProducts() {
-//   return products;
-// }
+export async function deleteProductById(id) {
+  const product = await sql`
+    DELETE FROM products WHERE id = ${id}
+  `;
+  return product;
+}
+
+export async function getProductById(id) {
+  const product = await sql`
+  SELECT * FROM products WHERE id = ${id}
+  `;
+  return product[0];
+}

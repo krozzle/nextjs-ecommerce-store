@@ -1,46 +1,49 @@
+import React from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-require('dotenv').config();
+// require('dotenv').config();
 
-const { getProducts, getProductById } = require('../../db');
+// const { getProducts, getProductById } = require('../../db');
 
-app.get('/', async (req, res) => {
-  const products = await getProducts();
+// app.get('/', async (req, res) => {
+//   const products = await getProducts();
 
-  res.send(`
-  <h1>Products</h1>
-  <ul>
-${users.map(product => {
-  return `<li>
-  <a href="/products/${product.id}">${product.name}</a>
-  </li>`;
-})}
-  </ul>
-  `);
-});
+//   res.send(`
+//   <h1>Products</h1>
+//   <ul>
+// ${users.map(product => {
+//   return `<li>
+//   <a href="/products/${product.id}">${product.name}</a>
+//   </li>`;
+// })}
+//   </ul>
+//   `);
+// });
 
-app.get('/products/:productId', async function productsHandler(req, res) {
-  const productId = req.params.productId;
+// app.get('/products/:productId', async function productsHandler(req, res) {
+//   const productId = req.params.productId;
 
-  const product = await getUserById(productId);
+//   const product = await getUserById(productId);
 
-  if (product.count === 0) {
-    res.status(404).send('we are out of stuff! soz');
-  }
-  res.send(`
-  <h1>${product[0].name}</h1>
-  <pre>${JSON.stringify(product[0])}</pre>
-  `);
-});
+//   if (product.count === 0) {
+//     res.status(404).send('we are out of stuff! soz');
+//   }
+//   res.send(`
+//   <h1>${product[0].name}</h1>
+//   <pre>${JSON.stringify(product[0])}</pre>
+//   `);
+// });
 
-app.listen(port, () =>
-  console.log(`example app listening at http://localhost:${port}`),
-);
+// app.listen(port, () =>
+//   console.log(`example app listening at http://localhost:${port}`),
+// );
 
-export default function products(props) {
+const Products = ({ products }) => {
+  const items = products;
+  console.log(items);
   return (
     <div className='container'>
       <Head>
@@ -59,12 +62,24 @@ export default function products(props) {
         </p>
 
         <div className='grid'>
-          <Link href='/products/1'>
-            <a className='card'>
-              <img className='image' src='/razor1.jpg' alt='Razor' />
-              <p>Razor (Vegan)</p>
-            </a>
-          </Link>
+          <ul>
+            {products.map(product => {
+              return (
+                <li key={product.id}>
+                  <Link
+                    href={'/products/' + product.id}
+                    as={'/products/' + product.id}
+                  >
+                    <a className='card'>
+                      <img src={product.img} alt="'product" />
+                      <h2>{product.name}</h2>
+                      <p>{product.price} €</p>
+                    </a>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </main>
 
@@ -222,4 +237,18 @@ export default function products(props) {
       `}</style>
     </div>
   );
+};
+export default Products;
+
+export async function getServerSideProps(context) {
+  const { getProducts } = await import('../../db.js');
+
+  const products = await getProducts(context.params);
+  console.log(products);
+
+  return {
+    props: {
+      products,
+    },
+  };
 }

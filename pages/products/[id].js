@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import cookie from 'js-cookie';
 import Head from 'next/head';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import { getProductById } from '../../db';
+import cookiesInCart from '../../cookiesInCart';
 
-export default function Product({ product }) {
-  if (!product) return <div>not found!</div>;
-
-  const [units, setUnits] = useState(0);
+const Product = ({ product }) => {
+  if (!product) return <div>product not found!</div>;
+  console.log(product);
+  const [units, setUnits] = useState(product.amount);
   const [total, setTotal] = useState(product.price);
 
   function handleUnits(e) {
@@ -16,9 +16,7 @@ export default function Product({ product }) {
     setTotal(e.target.value * product.price);
   }
   function addToCart() {
-    let cartItems = cookie.JSON('cart') || [];
-
-    const product = {
+    product = {
       id: product.id,
       name: product.name,
       image: product.image,
@@ -27,19 +25,28 @@ export default function Product({ product }) {
       amount: units,
     };
 
+    const cartItems = cookies.get('cart') || [];
+
     cartItems.push(product);
     cookie.set('cart', cartItems);
 
-    let itemFilter = itemsStored.find(item => item.id === product.id);
+    let itemFilter = cartItems.find(item => item.id === product.id);
 
-    if (itemFilter) {
-      cartItems = itemsStored.map((item, id) => {
-        item.id === product.id
-          ? { ...item, amount: product.amount + items }
-          : product;
-      });
-      cookie.set('cart', cartItems);
-    }
+    // if (itemFilter) {
+    //   let duplicatItems = cartItems.map(item => {
+    //     item.id === product.id
+    //       ? {
+    //           ...item,
+    //           amount: item.amount + units,
+    //           price: (item.amount + units) * item.price,
+    //         }
+    //       : item;
+    //   });
+    //   cookie.set('cart', duplicatItems);
+    // } else {
+    //   cartItems.push(product);
+    //   cookie.set('cart', cartItems);
+    // }
 
     window.location.reload();
   }
@@ -52,20 +59,20 @@ export default function Product({ product }) {
       </Head>
       <Header />
 
-      <main>
+      <div>
         <h2>The Smelly Husband's</h2>
 
-        <h1 className='title'>{product.name}</h1>
+        <h1 className='title'>{product.name || ''}</h1>
         <p className='description'>{product.description}</p>
 
-        <div className='grid'>
+        <div>
           <div>
-            <img className='image' src={product.image} alt='razor' />
+            <img className='image' src={product.img} alt='razor' />
           </div>
           <div>
             <p className='price'>{product.price}€</p>
 
-            <label for='productNumber'>
+            <label>
               <input
                 type='number'
                 min='1'
@@ -74,12 +81,12 @@ export default function Product({ product }) {
               ></input>
             </label>
             <p>Total: {total}€</p>
+            <button data-cy='addToCartButton' onClick={cookiesInCart(product)}>
+              add to cart
+            </button>
           </div>
         </div>
-        <div>
-          <button onClick={addToCart}>add to cart</button>
-        </div>
-      </main>
+      </div>
       <Footer />
       <style jsx>{`
         .container {
@@ -232,10 +239,13 @@ export default function Product({ product }) {
       `}</style>
     </div>
   );
-}
+};
 
-export function getServerSideProps(context) {
-  const product = getProductById(context.params.id);
+export default Product;
+
+export async function getServerSideProps(context) {
+  const { getProductById } = await import('../../db.js');
+  const product = await getProductById(context.params.id);
   if (product === undefined) {
     return { props: {} };
   }

@@ -22,12 +22,14 @@ export default function Home() {
         </p>
 
         <div className='grid'>
-          <a href='/store' className='card'>
-            <h3>Visit Our Store &rarr;</h3>
-            <p>
-              Find products to improve your husband, your home and your life.
-            </p>
-          </a>
+          <Link href={'/products'} className='card'>
+            <a>
+              <h3>Visit Our Store &rarr;</h3>
+              <p>
+                Find products to improve your husband, your home and your life.
+              </p>
+            </a>
+          </Link>
           <img className='image' src='/coffee-in-bed.jpg' alt='Coffee in bed' />
         </div>
       </main>
