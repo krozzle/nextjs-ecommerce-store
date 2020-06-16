@@ -5,11 +5,11 @@ import Head from 'next/head';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-export default function AddToCart(props) {
+export default function RemoveFromCart(props) {
   const unitsInCart = Cookie.getJSON('cart') || [];
   console.log(unitsInCart);
 
-  function makeCookies() {
+  function removeCookies() {
     const product = {
       name: props.product.name,
       price: props.total,
@@ -20,20 +20,20 @@ export default function AddToCart(props) {
     };
 
     if (props.pieces <= 0) {
-      alert('empty!');
+      alert("already empty, can't take from 0!");
     }
 
     const unitFilter = unitsInCart.find(unit => unit.id === product.id);
 
     // check if id already exists in shoppingCart,
-    // add amount + pieces, update totalPrice (amount + pieces) * unit
+    // remove amount - pieces, update totalPrice (amount - pieces) * unit
     if (unitFilter) {
-      const multipleUnits = unitsInCart.map(unit => {
+      const removeUnits = unitsInCart.map(unit => {
         if (unit.id === props.product.id) {
           return {
             ...unit,
-            amount: unit.amount + props.pieces,
-            price: (unit.amount + props.pieces) * unit.price,
+            amount: unit.amount - props.pieces,
+            price: (unit.amount - props.pieces) * unit.price,
 
             // price: unit.price * unit.amount,
           };
@@ -41,20 +41,19 @@ export default function AddToCart(props) {
           return unit;
         }
       });
-      Cookie.set('cart', multipleUnits);
+      Cookie.set('cart', removeUnits);
     } else {
       unitsInCart.push(product);
       Cookie.set('cart', unitsInCart);
     }
-    alert('added to the bag of goodness!');
+    console.log('are you really sure about removing this item? xd');
     window.location.reload();
   }
 
   // console.log('name', product);
   return (
     <div>
-      <button onClick={makeCookies}>Add to cart</button>
+      <button onClick={removeCookies}>Remove from cart :cry: </button>
     </div>
   );
 }
-// export default function AddToCart;
