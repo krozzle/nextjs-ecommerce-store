@@ -242,10 +242,20 @@ export default Products;
 
 export async function getServerSideProps(context) {
   const { getProducts } = await import('../../db.js');
+<<<<<<< HEAD:pages/products/index.tsx
+  const products = await getProducts();
+  console.log(products);
+  console.log('context', context);
+  if (products === undefined) {
+    return { props: {} };
+    // console.log(products);
+  }
+=======
 
   const products = await getProducts(context.params);
   console.log(products);
 
+>>>>>>> parent of 9769383... Break /products/index.js file:pages/products/index.js
   return {
     props: {
       products,

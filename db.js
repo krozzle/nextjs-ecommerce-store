@@ -25,6 +25,8 @@ export async function updateProductNameById(id, name) {
   const product = await sql`
     UPDATE products
       SET name = ${name}
+      SET price = ${price}
+      SET description = ${description}
       WHERE id = ${id}
   `;
   return product;

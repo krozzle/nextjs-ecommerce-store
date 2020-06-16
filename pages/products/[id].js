@@ -1,60 +1,68 @@
 import React, { useState } from 'react';
-import cookie from 'js-cookie';
+import Cookie from 'js-cookie';
+import { NextPageContext } from 'next';
 import Head from 'next/head';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import cookiesInCart from '../../cookiesInCart';
 
-const Product = ({ product }) => {
+type Item = {
+  id: string;
+  name: string;
+  img: string;
+  price: number;
+  description: string;
+};
+
+const Product = (product: Item) => {
+  const [total, setTotal] = useState<number>();
+  const [units, setUnits] = useState(1);
   if (!product) return <div>product not found!</div>;
-  console.log(product);
-  const [units, setUnits] = useState(product.amount);
-  const [total, setTotal] = useState(product.price);
+  console.log(product[0]);
 
   function handleUnits(e) {
     setUnits(Number(e.target.value));
     setTotal(e.target.value * product.price);
   }
-  function addToCart() {
-    product = {
-      id: product.id,
-      name: product.name,
-      image: product.image,
-      price: product.price,
-      description: product.description,
-      amount: units,
-    };
+  // function addToCart() {
+  //   product = {
+  //     id: product.id,
+  //     name: product.name,
+  //     image: product.image,
+  //     price: product.price,
+  //     description: product.description,
+  //     amount: units,
+  //   };
 
-    const cartItems = cookies.get('cart') || [];
+  const cartItems = Cookie.get('cart') || [];
 
-    cartItems.push(product);
-    cookie.set('cart', cartItems);
+  cartItems.push(product[0]);
+  Cookie.set('cart', cartItems);
 
-    let itemFilter = cartItems.find(item => item.id === product.id);
+  let itemFilter = cartItems.find(item => item.id === product[0].id);
 
-    // if (itemFilter) {
-    //   let duplicatItems = cartItems.map(item => {
-    //     item.id === product.id
-    //       ? {
-    //           ...item,
-    //           amount: item.amount + units,
-    //           price: (item.amount + units) * item.price,
-    //         }
-    //       : item;
-    //   });
-    //   cookie.set('cart', duplicatItems);
-    // } else {
-    //   cartItems.push(product);
-    //   cookie.set('cart', cartItems);
-    // }
+  // if (itemFilter) {
+  //   let duplicatItems = cartItems.map(item => {
+  //     item.id === product.id
+  //       ? {
+  //           ...item,
+  //           amount: item.amount + units,
+  //           price: (item.amount + units) * item.price,
+  //         }
+  //       : item;
+  //   });
+  //   cookie.set('cart', duplicatItems);
+  // } else {
+  //   cartItems.push(product);
+  //   cookie.set('cart', cartItems);
+  // }
 
-    window.location.reload();
-  }
+  window.location.reload();
 
   return (
     <div className='container'>
       <Head>
-        <title>{product.name}</title>
+        <title>{product[0].name}</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
@@ -62,15 +70,15 @@ const Product = ({ product }) => {
       <div>
         <h2>The Smelly Husband's</h2>
 
-        <h1 className='title'>{product.name || ''}</h1>
-        <p className='description'>{product.description}</p>
+        <h1 className='title'>{product[0].name || ''}</h1>
+        <p className='description'>{product[0].description}</p>
 
         <div>
           <div>
-            <img className='image' src={product.img} alt='razor' />
+            <img className='image' src={product[0].img} alt='razor' />
           </div>
           <div>
-            <p className='price'>{product.price}€</p>
+            <p className='price'>{product[0].price}€</p>
 
             <label>
               <input
@@ -240,19 +248,19 @@ const Product = ({ product }) => {
     </div>
   );
 };
-
 export default Product;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: NextPageContext) {
+  const id = context.query.id;
   const { getProductById } = await import('../../db.js');
-  const product = await getProductById(context.params.id);
+  const product = await getProductById();
   if (product === undefined) {
     return { props: {} };
   }
   return {
     // will be passed to the page component as props
     props: {
-      product,
+      product[0],
     },
   };
 }
