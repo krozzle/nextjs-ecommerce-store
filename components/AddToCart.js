@@ -16,7 +16,7 @@ export default function AddToCart(props) {
       info: props.product.info,
     };
 
-    if (props.pieces === 0) {
+    if (props.pieces >= 0) {
       alert('You need to enter a valid number of pieces!');
     }
     let itemFilter = itemsInCart.find(item => item.id === product.id);

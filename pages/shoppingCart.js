@@ -1,13 +1,15 @@
 import Head from 'next/head';
-import Link from 'next/link';
+// import Link from 'next/link';
+import Cookie from 'js-cookie';
+import nextCookies from 'next-cookies'
 import { useState } from 'react';
 import cookie from 'js-cookie';
-import nextCookies from 'next-cookies';
+// import nextCookies from 'next-cookies';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import products from './products/products';
+// import products from './products/products';
 
-export default function Cart(props) {
+export default function shoppingCart(cart, products) {
   const [total, setTotal] = useState(0);
   const [cart, setCart] = useState([]);
 
@@ -199,4 +201,17 @@ export default function Cart(props) {
       `}</style>
     </div>
   );
+}
+
+
+export async function getServerSideProps(context) {
+  const {cart} = await nextCookies(context);
+  const {getProducts} = await import('../db.js');
+  const products = await getProducts(context.params);
+  return {
+    props: {
+      ...(cart ? {cart: cart} : undefined),
+      products,
+    },
+  }
 }
