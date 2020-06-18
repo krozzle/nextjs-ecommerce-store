@@ -10,6 +10,7 @@ export default function AddToCart(props) {
   console.log(unitsInCart);
 
   function makeCookies() {
+    // getting the props out this bish
     const product = {
       name: props.product.name,
       price: props.total,
@@ -46,7 +47,7 @@ export default function AddToCart(props) {
       unitsInCart.push(product);
       Cookie.set('cart', unitsInCart);
     }
-    alert('added to the bag of goodness!');
+    console.log('added to the bag of goodness!');
     window.location.reload();
   }
 
@@ -57,4 +58,3 @@ export default function AddToCart(props) {
     </div>
   );
 }
-// export default function AddToCart;

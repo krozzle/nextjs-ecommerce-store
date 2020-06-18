@@ -1,4 +1,5 @@
 import React from 'react';
+import { NextPageContext } from 'next';
 import Link from 'next/link';
 import Head from 'next/head';
 import Header from '../../components/Header';
@@ -41,9 +42,19 @@ import Footer from '../../components/Footer';
 //   console.log(`example app listening at http://localhost:${port}`),
 // );
 
-const Products = ({ products }) => {
-  const items = products;
-  console.log(items);
+type Products = {
+  id: string;
+  name: string;
+  img: string;
+  price: number;
+  description: string;
+};
+
+type Props = { products: Products };
+
+export default function ProductsPage({ props: Props }) {
+  // const items = products;
+  // console.log(items);
   return (
     <div className='container'>
       <Head>
@@ -237,12 +248,10 @@ const Products = ({ products }) => {
       `}</style>
     </div>
   );
-};
-export default Products;
+}
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: NextPageContext) {
   const { getProducts } = await import('../../db.js');
-<<<<<<< HEAD:pages/products/index.tsx
   const products = await getProducts();
   console.log(products);
   console.log('context', context);
@@ -250,15 +259,8 @@ export async function getServerSideProps(context) {
     return { props: {} };
     // console.log(products);
   }
-=======
 
-  const products = await getProducts(context.params);
-  console.log(products);
-
->>>>>>> parent of 9769383... Break /products/index.js file:pages/products/index.js
   return {
-    props: {
-      products,
-    },
+    props: { products },
   };
 }
