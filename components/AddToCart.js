@@ -38,6 +38,7 @@ export default function AddToCart(props) {
 
             // price: unit.price * unit.amount,
           };
+          console.log('unit', unit);
         } else {
           return unit;
         }

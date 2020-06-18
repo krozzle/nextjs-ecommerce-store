@@ -56,7 +56,7 @@ const ProductsPage = (props: Props) => {
   // const items = products;
   // console.log(items);
   return (
-    <div className='container'>
+    <div>
       <Head>
         <title>store TSH</title>
         <link rel='icon' href='/favicon.ico' />
@@ -65,11 +65,11 @@ const ProductsPage = (props: Props) => {
 
       <main>
         <div>
-          <p className='description'>
+          <p>
             <code>welcome to</code>
           </p>
-          <h1 className='title'>The Smelly Husband's</h1>
-          <p className='description'>
+          <h1>The Smelly Husband's</h1>
+          <p>
             <code>online store</code>
           </p>
         </div>
@@ -139,7 +139,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      products: products,
+      products: products[0],
     },
     // console.log('products', props)
   };
