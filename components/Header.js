@@ -5,7 +5,7 @@ export default function Header() {
   const linkList = [
     { name: 'Home', url: '/' },
     { name: 'About', url: '/about' },
-    { name: 'Store', url: '/products' },
+    { name: 'Store', url: '/products/productsPage' },
     { name: 'Profile', url: '/users' },
   ];
 

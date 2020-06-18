@@ -22,15 +22,32 @@ export default function Home() {
         </p>
 
         <div className='grid'>
-          <Link href={'/products'} className='card'>
+          <Link href={'./products/productsPage'}>
             <a>
-              <h3>Visit Our Store &rarr;</h3>
-              <p>
-                Find products to improve your husband, your home and your life.
-              </p>
+              <div className='grid'>
+                <a className='card'>
+                  <h3>Visit Our Store &rarr;</h3>
+                  <p>
+                    Find products to improve your husband, your home and your
+                    life.
+                  </p>
+                </a>
+              </div>
+              <div>
+                <a>
+                  <img
+                    className='image'
+                    src='/coffee-in-bed.jpg'
+                    alt='Coffee in bed'
+                  />
+                </a>
+                {/* <Link>
+              <a href='/pages/products/productsPage.tsx'>
+              </a>
+            </Link> */}
+              </div>
             </a>
           </Link>
-          <img className='image' src='/coffee-in-bed.jpg' alt='Coffee in bed' />
         </div>
       </main>
 
@@ -70,8 +87,8 @@ export default function Home() {
         }
 
         .image {
-          width: 30%;
-          height: 100%;
+          width: 42em;
+          height: 48em;
         }
 
         footer a {

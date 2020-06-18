@@ -18,7 +18,7 @@ export async function getProducts() {
   const products = await sql`
   SELECT * FROM products
   `;
-  return products;
+  return products[0];
 }
 
 export async function updateProductNameById(id, name) {
@@ -29,14 +29,14 @@ export async function updateProductNameById(id, name) {
       SET description = ${description}
       WHERE id = ${id}
   `;
-  return product;
+  return product[0];
 }
 
 export async function deleteProductById(id) {
   const product = await sql`
     DELETE FROM products WHERE id = ${id}
   `;
-  return product;
+  return product[0];
 }
 
 export async function getProductById(id) {

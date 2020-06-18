@@ -1,101 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Cookie from 'js-cookie';
 import { NextPageContext } from 'next';
-import Link from 'next/link';
 import Head from 'next/head';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import AddToCart from '../../components/AddToCart';
 
-// require('dotenv').config();
-
-// const { getProducts, getProductById } = require('../../db');
-
-// app.get('/', async (req, res) => {
-//   const products = await getProducts();
-
-//   res.send(`
-//   <h1>Products</h1>
-//   <ul>
-// ${users.map(product => {
-//   return `<li>
-//   <a href="/products/${product.id}">${product.name}</a>
-//   </li>`;
-// })}
-//   </ul>
-//   `);
-// });
-
-// app.get('/products/:productId', async function productsHandler(req, res) {
-//   const productId = req.params.productId;
-
-//   const product = await getUserById(productId);
-
-//   if (product.count === 0) {
-//     res.status(404).send('we are out of stuff! soz');
-//   }
-//   res.send(`
-//   <h1>${product[0].name}</h1>
-//   <pre>${JSON.stringify(product[0])}</pre>
-//   `);
-// });
-
-// app.listen(port, () =>
-//   console.log(`example app listening at http://localhost:${port}`),
-// );
-
-type Products = {
+type Item = {
   id: string;
   name: string;
   img: string;
   price: number;
   description: string;
 };
+type Props = { product: Item };
 
-type Props = { products: Products };
+const Product = (props: Props) => {
+  if (!props.product) return <div>product not found!</div>;
+  // console.log(props.product);
+  const [total, setTotal] = useState(props.product.price);
+  const [units, setUnits] = useState(1);
+  // console.log(props.product);
 
-export default function ProductsPage({ props: Props }) {
-  // const items = products;
-  // console.log(items);
+  function handleUnits(e) {
+    setUnits(Number(e.target.value));
+    setTotal(Number(e.target.value) * props.product.price);
+  }
+
   return (
     <div className='container'>
-      <Head>
-        <title>store TSH</title>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <Header />
+      <div className='grid'>
+        <code>welcome to</code>
+        <h2>The Smelly Husband's</h2>
+        <code>online store</code>
 
-      <main>
-        <p className='description'>
-          <code>welcome to</code>
-        </p>
-        <h1 className='title'>The Smelly Husband's</h1>
-        <p className='description'>
-          <code>online store</code>
-        </p>
+        <h1 className='title'>{props.product.name || ''}</h1>
+        <p className='description'>{props.product.description}</p>
 
-        <div className='grid'>
-          <ul>
-            {products.map(product => {
-              return (
-                <li key={product.id}>
-                  <Link
-                    href={'/products/' + product.id}
-                    as={'/products/' + product.id}
-                  >
-                    <a className='card'>
-                      <img src={product.img} alt="'product" />
-                      <h2>{product.name}</h2>
-                      <p>{product.price} €</p>
-                    </a>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+        <div>
+          <div>
+            <img className='image' src={props.product.img} alt='razor' />
+          </div>
+          <div>
+            <p className='price'>{props.product.price}€</p>
+
+            <label>
+              <input
+                type='number'
+                min='1'
+                max='9'
+                placeholder='1'
+                onChange={handleUnits}
+              ></input>
+            </label>
+            <p>Total: {total}€</p>
+            <button onClick={AddToCart} data-cy='addToCartButton'>
+              add to cart
+            </button>
+          </div>
         </div>
-      </main>
-
+      </div>
       <Footer />
-
       <style jsx>{`
         .container {
           min-height: 100vh;
@@ -110,13 +75,12 @@ export default function ProductsPage({ props: Props }) {
           padding: 5rem 0;
           flex: 1;
           display: flex;
-          flex-direction: column;
+          flex-direction: column; 
           justify-content: center;
           align-items: center;
         }
 
         footer {
-          width: 100%;
           height: 100px;
           border-top: 1px solid #eaeaea;
           display: flex;
@@ -166,7 +130,7 @@ export default function ProductsPage({ props: Props }) {
           font-size: 1.5rem;
         }
 
-        .codeStyle {
+        code {
           background: #fafafa;
           border-radius: 5px;
           padding: 0.75rem;
@@ -187,9 +151,9 @@ export default function ProductsPage({ props: Props }) {
 
         .card {
           margin: 1rem;
-          height: 15em;
+          flex-basis: 45%;
           padding: 1.5rem;
-          text-align: center;
+          text-align: left;
           color: inherit;
           text-decoration: none;
           border: 1px solid #eaeaea;
@@ -198,7 +162,7 @@ export default function ProductsPage({ props: Props }) {
         }
 
         .image {
-          width: 30%;
+          width: 20em;
           height: 100%;
         }
 
@@ -248,19 +212,21 @@ export default function ProductsPage({ props: Props }) {
       `}</style>
     </div>
   );
-}
+};
+export default Product;
 
-export async function getServerSideProps(context: NextPageContext) {
-  const { getProducts } = await import('../../db.js');
-  const products = await getProducts();
-  console.log(products);
-  console.log('context', context);
-  if (products === undefined) {
+export async function getServerSideProps(context) {
+  // const id = context.params.id;
+  const { getProductById } = await import('../../db.js');
+  const product = await getProductById(context.params.id);
+  // console.log('product', product);
+  if (product === undefined) {
     return { props: {} };
-    // console.log(products);
   }
-
   return {
-    props: { products },
+    // will be passed to the page component as props
+    props: {
+      product: product,
+    },
   };
 }
