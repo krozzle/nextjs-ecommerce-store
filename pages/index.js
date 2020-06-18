@@ -22,32 +22,28 @@ export default function Home() {
         </p>
 
         <div className='grid'>
-          <Link href={'./products/productsPage'}>
-            <a>
-              <div className='grid'>
-                <a className='card'>
-                  <h3>Visit Our Store &rarr;</h3>
-                  <p>
-                    Find products to improve your husband, your home and your
-                    life.
-                  </p>
-                </a>
-              </div>
-              <div>
-                <a>
-                  <img
-                    className='image'
-                    src='/coffee-in-bed.jpg'
-                    alt='Coffee in bed'
-                  />
-                </a>
-                {/* <Link>
-              <a href='/pages/products/productsPage.tsx'>
+          <div className='grid'>
+            <Link href={'./products/productsPage'}>
+              <a className='card'>
+                <h3>Visit Our Store &rarr;</h3>
+                <p>
+                  Find products to improve your husband, your home and your
+                  life.
+                </p>
               </a>
-            </Link> */}
-              </div>
-            </a>
-          </Link>
+            </Link>
+          </div>
+          <div>
+            <Link href={'./products/productsPage'}>
+              <a>
+                <img
+                  className='image'
+                  src='/coffee-in-bed.jpg'
+                  alt='Coffee in bed'
+                />
+              </a>
+            </Link>
+          </div>
         </div>
       </main>
 
@@ -88,7 +84,7 @@ export default function Home() {
 
         .image {
           width: 42em;
-          height: 48em;
+          height: 40em;
         }
 
         footer a {

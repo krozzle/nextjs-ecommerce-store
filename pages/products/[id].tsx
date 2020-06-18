@@ -29,7 +29,7 @@ const Product = (props: Props) => {
 
   return (
     <div className='container'>
-      <div className='grid'>
+      <div className='column'>
         <code>welcome to</code>
         <h2>The Smelly Husband's</h2>
         <code>online store</code>
@@ -147,6 +147,12 @@ const Product = (props: Props) => {
 
           max-width: 800px;
           margin-top: 3rem;
+        }
+
+        .column {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
 
         .card {
