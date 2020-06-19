@@ -12,7 +12,7 @@ export default function Home() {
       </Head>
       <Header />
 
-      <main>
+      <main className='grid'>
         <p className='description'>
           <code>Welcome To</code>
         </p>
@@ -22,25 +22,25 @@ export default function Home() {
         </p>
 
         <div className='grid'>
-          <div className='grid'>
+          <div>
             <Link href={'./products/productsPage'}>
-              <a className='card'>
-                <h3>Visit Our Store &rarr;</h3>
-                <p>
-                  Find products to improve your husband, your home and your
-                  life.
-                </p>
+              <a className='a'>
+                <img
+                  className='image'
+                  src='/coffee-in-bed.jpg'
+                  alt='Coffee in bed'
+                />
               </a>
             </Link>
           </div>
           <div>
             <Link href={'./products/productsPage'}>
               <a>
-                <img
-                  className='image'
-                  src='/coffee-in-bed.jpg'
-                  alt='Coffee in bed'
-                />
+                <h3>Visit Our Store &rarr;</h3>
+                <p>
+                  Find products to improve your husband, your home and your
+                  life.
+                </p>
               </a>
             </Link>
           </div>
@@ -96,6 +96,7 @@ export default function Home() {
         a {
           color: inherit;
           text-decoration: none;
+          margin: 0 5em 0 5em;
         }
 
         .title a {
@@ -137,10 +138,12 @@ export default function Home() {
         .grid {
           display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: space-around;
+           {
+            /* flex-wrap: wrap; */
+          }
 
-          max-width: 100%;
-          min-width: 60%;
+          max-width: 800px;
           margin-top: 3rem;
         }
 

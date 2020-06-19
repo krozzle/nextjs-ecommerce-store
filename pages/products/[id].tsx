@@ -29,19 +29,24 @@ const Product = (props: Props) => {
 
   return (
     <div className='container'>
+      <Head>
+        <title>{props.product.name}</title>
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
+      <Header />
       <div className='column'>
         <code>welcome to</code>
         <h2>The Smelly Husband's</h2>
         <code>online store</code>
 
         <h1 className='title'>{props.product.name || ''}</h1>
-        <p className='description'>{props.product.description}</p>
 
         <div>
-          <div>
+          <div className='grid'>
             <img className='image' src={props.product.img} alt='razor' />
           </div>
           <div>
+            <p className='description'>{props.product.description}</p>
             <p className='price'>{props.product.price}€</p>
 
             <label>
@@ -126,6 +131,7 @@ const Product = (props: Props) => {
         }
 
         .description {
+          width: 30em;
           line-height: 1.5;
           font-size: 1.5rem;
         }
@@ -168,7 +174,7 @@ const Product = (props: Props) => {
         }
 
         .image {
-          width: 20em;
+          width: 25em;
           height: 100%;
         }
 
